@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
 from django.views.generic import DayArchiveView
+from django.views.generic.edit import CreateView
 
 from .models import Exercise
 
@@ -28,6 +29,10 @@ class ExerciseArchiveDayView(DayArchiveView):
     date_field = 'time'
     allow_future = False
     template_name = 'exercise/archive_day.html'
+
+class ExerciseCreate(CreateView):
+    model = Exercise
+    fields = ['time', 'exercise', 'amount', 'weight', 'units', 'notes']
 
 
 
