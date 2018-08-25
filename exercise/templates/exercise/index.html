@@ -1,0 +1,12 @@
+
+{% for day, exercise_list in exercises_by_day %}
+{{ day|date:"D M d, Y" }}
+<ul>
+{% for exercise in exercise_list %}
+<li>{{exercise.exercise }} --- {{ exercise.amount }} 
+	{% if exercise.weight %}x {{ exercise.weight }}{% endif %} 
+	{% if exercise.units %}({{ exercise.units }}){% endif %}</li>
+{% endfor %}
+</ul>
+{% endfor %}
+	
