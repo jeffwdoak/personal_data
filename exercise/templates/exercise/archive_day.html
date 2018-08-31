@@ -8,16 +8,12 @@
 
 <p>
     {% if previous_day %}
-        Previous Day: {{ previous_day }}
-	{% comment %}
-	<a href="{% url 'exercise:archive_day' previous_day.strftime('%Y/%b/%d') %}">Previous Day: {{ previous_day }}</a>
-	{% endcomment %}
+	{% url 'exercise:archive_day' year=previous_day|date:'Y' month=previous_day|date:'b' day=previous_day|date:'d' as previous_day_url %}
+	<a href="{{ previous_day_url }}">Previous Day: {{ previous_day }}</a>
     {% endif %}
     {% if previous_day and next_day %}--{% endif %}
     {% if next_day %}
-        Next Day: {{ next_day }}
-	{% comment %}
-	<a href="{% url 'exercise:archive_day' next_day.strftime('%Y/%b/%d') %}">Next Day: {{ next_day }}</a>
-	{% endcomment %}
+	{% url 'exercise:archive_day' year=next_day|date:'Y' month=next_day|date:'b' day=next_day|date:'d' as next_day_url %}
+	<a href="{{ next_day_url }}">Next Day: {{ next_day }}</a>
     {% endif %}
 </p>
