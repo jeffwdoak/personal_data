@@ -2,19 +2,52 @@
 Tests of exercise/models.py
 
 """
+import datetime
 
 from django.test import TestCase
+from django.utils import timezone
 
 from exercise.models import Exercise
 
 class ExerciseTestCase(TestCase):
-    def setUp(self):
-        pass
+    """
+    Tests of Exercise model class
 
-    def test_exercise_has_correct_fields(self):
-        pass
+    """
+    def setUp(self):
+        Exercise.objects.create(
+            time=datetime.datetime(2018, 8, 1, 12, 5, 0, tzinfo=timezone.utc),
+            exercise='running',
+            amount=15,
+            units='min',
+            notes='Hard run!',
+            )
+        Exercise.objects.create(
+            time=datetime.datetime(2018, 8, 2, 12, 45, 0, tzinfo=timezone.utc),
+            exercise='squat',
+            amount=5,
+            weight=135,
+            units='lbs',
+            )
+
+    def test_running_exercise_has_correct_fields(self):
+        """Test construction of an Exercise object"""
+        expected_fields = {
+            'time': datetime.datetime(2018, 8, 1, 12, 5, 0,
+                                      tzinfo=timezone.utc),
+            'exercise': 'running',
+            'amount': 15,
+            'units': 'min',
+            'notes': 'Hard run!',
+            'weight': None,
+            }
+        running = Exercise.objects.get(exercise='running')
+        actual_fields = {name:running.__dict__[name] for name in expected_fields}
+        for name in expected_fields:
+            self.assertEqual(expected_fields[name], actual_fields[name])
 
     def test_get_all_exercises(self):
-        pass
-
-
+        """Test class method to get list of all exercises"""
+        expected_exercises = {'squat', 'running'}
+        actual_exercises = Exercise.get_all_exercises()
+        self.assertEqual(expected_exercises, actual_exercises)
