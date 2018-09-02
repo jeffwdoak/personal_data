@@ -10,6 +10,13 @@ from django.db import models
 
 
 class Exercise(models.Model):
+    """
+    Store an exercise 'set', defined by a single set of repetitions of weight
+    lifting or an aerobic exercise. The exercise has a time, exercise, and
+    amount associated with it. Optional fields include a weight, units for the
+    amount or weight, and notes about the exercise.
+
+    """
     time = models.DateTimeField()
     exercise = models.CharField(max_length=200)
     amount = models.IntegerField()
@@ -22,6 +29,7 @@ class Exercise(models.Model):
 
     @classmethod
     def get_all_exercises(cls):
+        """Get set of all exercises across all objects"""
         #all_exercises = cls.objects.values('exercise').distinct()
         #all_exercises = [query['exercise'] for query in all_exercises]
         all_exercises = cls.objects.values_list('exercise',
