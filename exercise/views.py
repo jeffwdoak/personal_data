@@ -4,7 +4,7 @@ Views for exercise-tracking app.
 """
 import datetime
 
-from django.http import HttpResponse
+#from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
 from django.views.generic import DayArchiveView
@@ -14,6 +14,12 @@ from .models import Exercise
 from .forms import ExerciseForm
 
 def exercise_index_view(request):
+    """
+    Index view /exercises/ shows exercises over the last 5 days.
+    TODO: Make this the last 5 days in the database, rather than the last 5
+    calendar days.
+
+    """
     five_days_ago = timezone.now() - datetime.timedelta(days=5)
     exercises = Exercise.objects.filter(time__gte=five_days_ago)
     days = exercises.datetimes('time', 'day').order_by('-datetimefield')
@@ -26,17 +32,29 @@ def exercise_index_view(request):
     return render(request, 'exercise/index.html', context)
 
 class ExerciseArchiveDayView(DayArchiveView):
+    """Archive view showing all exercises on a given day"""
     queryset = Exercise.objects.all()
     date_field = 'time'
     allow_future = False
     template_name = 'exercise/archive_day.html'
 
 class ExerciseCreate(CreateView):
+    """
+    View for form to create a new exercise.
+
+    """
     form_class = ExerciseForm
     model = Exercise
     #template_name = 'exercise/exercise_form.html'
     #fields = ['time', 'exercise', 'amount', 'weight', 'units', 'notes']
     initial = {'time': timezone.now(),}
+
+    def get_form_kwargs(self, *args, **kwargs):
+        form_kwargs = super(ExerciseCreate, self).get_form_kwargs(*args,
+                                                                  **kwargs)
+        form_kwargs['exercise_list'] = Exercise.get_all_exercises()
+        return form_kwargs
+
 
 
 
