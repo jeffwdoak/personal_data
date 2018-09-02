@@ -29,6 +29,13 @@ class ExerciseTestCase(TestCase):
             weight=135,
             units='lbs',
             )
+        Exercise.objects.create(
+            time=datetime.datetime(2018, 8, 2, 12, 45, 0, tzinfo=timezone.utc),
+            exercise='squat',
+            amount=5,
+            weight=135,
+            units='kgs',
+            )
 
     def test_running_exercise_has_correct_fields(self):
         """Test construction of an Exercise object"""
@@ -51,3 +58,10 @@ class ExerciseTestCase(TestCase):
         expected_exercises = {'squat', 'running'}
         actual_exercises = Exercise.get_all_exercises()
         self.assertEqual(expected_exercises, actual_exercises)
+
+    def test_get_all_units(self):
+        """Test class method to get all units for a specified exercise"""
+        exercise = 'squat'
+        expected_units = {'lbs', 'kgs'}
+        actual_units = Exercise.get_all_units(exercise)
+        self.assertEqual(expected_units, actual_units)

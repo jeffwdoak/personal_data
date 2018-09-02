@@ -36,3 +36,11 @@ class Exercise(models.Model):
                                                 flat=True).distinct()
         all_exercises = set(all_exercises)
         return all_exercises
+
+    @classmethod
+    def get_all_units(cls, exercise):
+        """Get set of all units across all objects of given exercise"""
+        all_units = cls.objects.filter(exercise=exercise)
+        all_units = all_units.values_list('units', flat=True).distinct()
+        all_units = set(all_units)
+        return all_units
