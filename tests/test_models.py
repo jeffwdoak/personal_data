@@ -53,6 +53,14 @@ class ExerciseTestCase(TestCase):
         for name in expected_fields:
             self.assertEqual(expected_fields[name], actual_fields[name])
 
+    def test_exercise_str(self):
+        """Test __str__ method"""
+        time = datetime.datetime(2018, 8, 1, 12, 5, 0, tzinfo=timezone.utc)
+        running = Exercise.objects.get(exercise='running')
+        expected_str = str(time)+' running'
+        actual_str = running.__str__()
+        self.assertEqual(expected_str, actual_str)
+
     def test_get_all_exercises(self):
         """Test class method to get list of all exercises"""
         expected_exercises = {'squat', 'running'}
