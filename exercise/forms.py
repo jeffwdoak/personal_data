@@ -1,7 +1,11 @@
+"""
+Forms for Exercise app.
 
+"""
 
 #import floppyforms.__future__ as forms
-import django.forms as forms
+#import django.forms as forms
+from django import forms
 
 from .models import Exercise
 
@@ -29,25 +33,31 @@ class ListTextWidget(forms.TextInput):
 
 
 class ExerciseForm(forms.ModelForm):
+    """
+    Form to add new Exercise, collecting pre-existing exercises to aid new data
+    entry.
+
+    """
     template_name = 'exercise/exercise_form.html'
-    #char_field_with_list = forms.CharField(required=True)
-    #time = DateTimeField(widget=forms.SplitDateTimeWidget)
+
     def __init__(self, *args, **kwargs):
-        default_list = ['one', 'two']
+        #default_list = ['one', 'two']
+        default_list = {'one', 'two'}
         self.exercise_list = kwargs.pop('exercise_list', default_list)
         self.unit_list = kwargs.pop('unit_list', default_list)
         super(ExerciseForm, self).__init__(*args, **kwargs)
-        self.fields['exercise'].widget = ListTextWidget(data_list=self.exercise_list, name='exercise-list')
-        self.fields['units'].widget = ListTextWidget(data_list=self.unit_list, name='unit-list')
+        self.fields['exercise'].widget = ListTextWidget(
+            data_list=self.exercise_list,
+            name='exercise-list',
+            )
+        self.fields['units'].widget = ListTextWidget(
+            data_list=self.unit_list,
+            name='unit-list',
+            )
+
     class Meta:
         model = Exercise
         fields = ['time', 'exercise', 'amount', 'weight', 'units', 'notes']
-        #all_exercises = Exercise.objects.values('exercise').distinct()
-        #all_exercises = [query['exercise'] for query in all_exercises]
-        #all_exercises = ['one', 'two', 'three']
         widgets = {
-                'time': forms.SplitDateTimeWidget,
-                }
-
-
-
+            'time': forms.SplitDateTimeWidget,
+            }
