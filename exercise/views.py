@@ -11,6 +11,7 @@ from django.views.generic import DayArchiveView
 from django.views.generic.edit import CreateView
 
 from .models import Exercise
+from .forms import ExerciseForm
 
 def exercise_index_view(request):
     five_days_ago = timezone.now() - datetime.timedelta(days=5)
@@ -31,8 +32,11 @@ class ExerciseArchiveDayView(DayArchiveView):
     template_name = 'exercise/archive_day.html'
 
 class ExerciseCreate(CreateView):
+    form_class = ExerciseForm
     model = Exercise
-    fields = ['time', 'exercise', 'amount', 'weight', 'units', 'notes']
+    #template_name = 'exercise/exercise_form.html'
+    #fields = ['time', 'exercise', 'amount', 'weight', 'units', 'notes']
+    initial = {'time': timezone.now(),}
 
 
 
